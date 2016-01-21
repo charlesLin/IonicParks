@@ -1,0 +1,20 @@
+<ion-view view-title="{{title}}">
+    <ion-content>
+        <label class="item item-input">
+            <i class="icon ion-search"></i>
+            <input type="text" placeholder="搜尋" ng-model="searchText">
+        </label>
+        <ion-list>
+            <ion-item ng-repeat="park in parks | filter: searchText" href="#/app/parks/{{park._id}}" class="item item-icon-right">
+                {{park.ParkName}}
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+        </ion-list>
+        <div class="bar bar-footer bar-light">
+            <button class="button icon ion-ios-rewind" ng-click="prevPage()">上一頁</button>
+            <button class="button icon ion-navicon"></button>
+            <h1 class="title">{{pageNo}}</h1>
+            <button class="button icon ion-ios-fastforward" ng-click="nextPage()">下一頁</button>
+        </div>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,11 @@
+<ion-view view-title="瀏覽">
+    <ion-content>
+        <ion-list>
+            <ion-item ng-repeat="area in areas track by $index" class="item-icon-right"
+                href="#app/areas/{{area}}">
+                {{area}}
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>
