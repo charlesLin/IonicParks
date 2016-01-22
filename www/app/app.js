@@ -82,6 +82,30 @@ angular.module('SampleApp', ['ionic', 'SampleApp.controllers'])
         $urlRouterProvider.otherwise('/app/parks');
     })
     .constant("ApiEndpoint", {
-        url : 'http://localhost:8100/opendata'
+        url: 'http://localhost:8100/opendata'
     })
+    .config(function ($httpProvider) {
+        $httpProvider.interceptors.push(function ($rootScope) {
+            return {
+                request: function (config) {
+                    $rootScope.$broadcast('loading:show')
+                    return config
+                },
+                response: function (response) {
+                    $rootScope.$broadcast('loading:hide')
+                    return response
+                }
+            }
+        });
+    })
+    .run(function ($rootScope, $ionicLoading) {
+        $rootScope.$on("loading:show", function () {
+            $ionicLoading.show({ template: '<ion-spinner icon="spiral" />' });
+        })
+
+        $rootScope.$on("loading:hide", function () {
+            $ionicLoading.hide();
+        })
+
+    });
 ;
