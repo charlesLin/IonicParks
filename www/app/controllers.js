@@ -42,33 +42,37 @@ angular.module('SampleApp.controllers', [])
     })
 
     .controller('ParksCtrl', function ($scope, parksService) {
-        debugger;
         $scope.title = "所有公園";
         $scope.skip = 0;
         $scope.limit = 10;
         $scope.pageNo = 1;
-        getParks();
+        $scope.searchText;
 
         $scope.nextPage = function () {
             $scope.pageNo++;
             $scope.skip = ($scope.pageNo - 1) * 10;
-            getParks();
+            $scope.getParks();
         }
 
         $scope.prevPage = function () {
             if ($scope.pageNo > 1) {
                 $scope.pageNo--;
                 $scope.skip = ($scope.pageNo - 1) * 10;
-                getParks();
+                $scope.getParks();
             }
         }
 
 
-        function getParks() {
-            parksService.getParks($scope.skip, $scope.limit, function (data) {
+        $scope.getParks = function () {
+
+            var where = undefined;
+            if ($scope.searchText) where = "ParkName:" + $scope.searchText;
+            parksService.getParks(where, $scope.skip, $scope.limit, function (data) {
                 $scope.parks = data;
             });
         }
+
+        $scope.getParks();
     })
 
     .controller('ParkCtrl', function ($scope, parksService, $stateParams) {

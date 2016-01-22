@@ -1,20 +1,30 @@
 <ion-view view-title="{{title}}">
-    <ion-content>
-        <label class="item item-input">
+
+    <ion-header-bar class="bar bar-subheader">
+        <!--<label class="item item-input-inset">
             <i class="icon ion-search"></i>
-            <input type="text" placeholder="搜尋" ng-model="searchText">
+            <input type="text" placeholder="搜尋" ng-model="searchText" ng-change="getParks()">
+        </label>-->
+        <label class="item-input-wrapper" id="search-input">
+            <i class="icon ion-search placeholder-icon"></i>
+            <input type="text" placeholder="Search" ng-model="searchText" ng-change="getParks()">
         </label>
+    </ion-header-bar>
+
+    <ion-content>
+
         <ion-list>
-            <ion-item ng-repeat="park in parks | filter: searchText" href="#/app/parks/{{park._id}}" class="item item-icon-right">
+            <ion-item ng-repeat="park in parks" href="#/app/parks/{{park._id}}" class="item item-icon-right">
                 {{park.ParkName}}
-                <i class="icon ion-chevron-right icon-accessory"></i>
+                <i class="icoßn ion-chevron-right icon-accessory"></i>
             </ion-item>
         </ion-list>
-        <div class="bar bar-footer bar-light">
-            <button class="button icon ion-ios-rewind" ng-click="prevPage()">上一頁</button>
-            <button class="button icon ion-navicon"></button>
-            <h1 class="title">{{pageNo}}</h1>
-            <button class="button icon ion-ios-fastforward" ng-click="nextPage()">下一頁</button>
-        </div>
+
     </ion-content>
+    <ion-footer-bar class="bar bar-footer bar-light">
+        <button class="button icon ion-ios-rewind" ng-click="prevPage()">上一頁</button>
+        <h1 class="title">{{pageNo}}</h1>
+        <button class="button icon ion-ios-fastforward" ng-click="nextPage()">下一頁</button>
+    </ion-footer-bar>
+
 </ion-view>
