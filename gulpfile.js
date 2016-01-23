@@ -50,6 +50,7 @@ gulp.task('git-check', function (done) {
     done();
 });
 
+//http://blog.ionic.io/handling-cors-issues-in-ionic/
 var replace = require('replace');
 var replaceFiles = ['./www/app/app.js'];
 

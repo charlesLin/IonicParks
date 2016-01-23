@@ -19,13 +19,13 @@
         ////////////////
 
         function getPark(id) {
-            return _.find(getParks(), function (park) {
+            return _.find(getAllParks(), function (park) {
                 return park._id == id;
             })
         }
 
         function getParksInArea(area) {
-            return _.filter(getParks(), function (park) {
+            return _.filter(getAllParks(), function (park) {
                 return park.AdministrativeArea == area;
             })
         }
@@ -35,7 +35,9 @@
             //http://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=bf073841-c734-49bf-a97f-3757a6013812&limit=10&offset=10
             //var url = "http://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&//rid=bf073841-c734-49bf-a97f-3757a6013812&limit=" + limit + "&offset=" + skip;
 
-            var url = ApiEndpoint.url + "/datalist/apiAccess?scope=resourceAquire&rid=8f6fcb24-290b-461d-9d34-72ed1b3f51f0&limit=" + limit + "&offset=" + skip;
+            var url = ApiEndpoint.url + "/datalist/apiAccess?scope=resourceAquire&rid=8f6fcb24-290b-461d-9d34-72ed1b3f51f0";
+            if (limit) url += "&limit=" + limit;
+            if (skip) url +=  "&offset=" + skip;
 
             if (where)
                 url += "&q=" + where;
@@ -45,6 +47,10 @@
                 cb(data.data.result.results);
             });
 
+
+        }
+
+        function getAllParks() {
             var result =
 
 
