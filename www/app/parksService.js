@@ -5,8 +5,8 @@
         .module('SampleApp')
         .factory('parksService', parksService);
 
-    parksService.$inject = ['$http', 'ApiEndpoint'];
-    function parksService($http, ApiEndpoint) {
+    parksService.$inject = ['$http', 'ApiEndpoint', '$q'];
+    function parksService($http, ApiEndpoint, $q) {
         var service = {
             getParks: getParks,
             getPark: getPark,
@@ -42,11 +42,15 @@
             if (where)
                 url += "&q=" + where;
 
+            var deferred = $q.defer();
             $http.get(url).then(function (data) {
-                console.log(data.data.result.results);
-                cb(data.data.result.results);
+                //cb(data.data.result.results);
+                deferred.resolve(data.data.result.results);
+            }, function (data) {
+                deferred.reject("發生錯誤");
             });
 
+            return deferred.promise;
 
         }
 

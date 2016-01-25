@@ -67,7 +67,7 @@ angular.module('SampleApp.controllers', [])
 
             var where = undefined;
             if ($scope.searchText) where = "ParkName:" + $scope.searchText;
-            parksService.getParks(where, $scope.skip, $scope.limit, function (data) {
+            parksService.getParks(where, $scope.skip, $scope.limit).then(function (data) {
                 $scope.parks = data;
             });
         }
