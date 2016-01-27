@@ -75,12 +75,30 @@ angular.module('SampleApp.controllers', [])
         $scope.getParks();
     })
 
-    .controller('ParkCtrl', function ($scope, parksService, $stateParams) {
-        $scope.park = parksService.getPark($stateParams.parkId);
-        $scope.getDesc = function () {
-            return $scope.park.Introduction.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    .controller('ParkCtrl', function ($scope, parksService, $stateParams, $cordovaDialogs) {
+        var self = this;
+        self.park = parksService.getPark($stateParams.parkId);
+        self.getDesc = function () {
+            return self.park.Introduction.replace(/(?:\r\n|\r|\n)/g, '<br />');
         }
-        console.log($scope.park);
+        self.addFavorate = function () {
+            $cordovaDialogs.alert("已加入收藏", "資訊", "確定");
+            self.added = !self.added;
+        }
+
+        self.removeFromFavorates = function () {
+            $cordovaDialogs.confirm("確定要移除收藏?", "警告", ["確定", "取消"]).then(function (buttonIndex) {
+                if (buttonIndex == 1) {
+                    alert("已移除收藏");
+                    self.added = !self.added;
+                } else {
+                    alert("已取消");
+                }
+            });
+
+        }
+
+
     })
     .controller('AreasCtrl', function ($scope, areaService) {
         $scope.areas = areaService.getAreas();
@@ -88,4 +106,42 @@ angular.module('SampleApp.controllers', [])
     .controller('AreaCtrl', function ($scope, parksService, $stateParams) {
         $scope.parks = parksService.getParksInArea($stateParams.area);
         $scope.title = $stateParams.area;
-    });
+    })
+    .controller('ngCordovaCtrl', function ($cordovaVibration, $cordovaCamera) {
+        var vm = this;
+        vm.vibrate = function () {
+            $cordovaVibration.vibrate(500);
+        }
+
+        vm.takePic = function () {
+            var options = {
+                quality: 50,
+                destinationType: Camera.DestinationType.DATA_URL,
+                sourceType: Camera.PictureSourceType.CAMERA,
+                allowEdit: true,
+                encodingType: Camera.EncodingType.JPEG,
+                targetWidth: 100,
+                targetHeight: 100,
+                popoverOptions: CameraPopoverOptions,
+                saveToPhotoAlbum: true,
+                correctOrientation: true
+            };
+            $cordovaCamera.getPicture(options).then(function (imageData) {
+                var image = document.getElementById('myImage');
+                image.src = "data:image/jpeg;base64," + imageData;
+            });
+        }
+
+        vm.takeVideo = function () {
+            var options = {
+                quality: 50,
+                sourceType: Camera.PictureSourceType.CAMERA,
+                mediaType: 1,
+                estinationType: Camera.DestinationType.FILE_URI
+            };
+            $cordovaCamera.getPicture(options).then(function (imageData) {
+                console.log(imageData);
+            });
+        }
+    })
+;

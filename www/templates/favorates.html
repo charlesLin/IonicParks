@@ -1,0 +1,13 @@
+<ion-view title="收藏">
+    <ion-content>
+
+        <div class="card" ng-repeat="favorate in vm.favorates">
+            <div class="item item-checkbox">
+                <h2></h2>
+                <label  class="checkbox">
+                    <input type="checkbox" ng-model="favorate.following">
+                </label>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

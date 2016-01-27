@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('SampleApp', ['ionic', 'SampleApp.controllers'])
+angular.module('SampleApp', ['ionic', 'SampleApp.controllers', 'ngCordova'])
     .run(function ($ionicPlatform) {
         $ionicPlatform.ready(function () {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -74,10 +74,23 @@ angular.module('SampleApp', ['ionic', 'SampleApp.controllers'])
                 views: {
                     'menuContent': {
                         templateUrl: 'templates/park.html',
-                        controller: 'ParkCtrl'
+                        controller: 'ParkCtrl',
+                        controllerAs: 'vm'
                     }
                 }
-            });
+            })
+            .state('app.ngCordova',
+                {
+                    url: '/ngCordova',
+                    views: {
+                        'menuContent': {
+                            templateUrl: 'templates/ngCordova.html',
+                            controller : 'ngCordovaCtrl',
+                            controllerAs: 'vm'
+                        }
+                    }
+                });
+        ;
         // if none of the above states are matched, use this as the fallback
         $urlRouterProvider.otherwise('/app/parks');
     })
