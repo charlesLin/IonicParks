@@ -41,7 +41,7 @@ angular.module('SampleApp.controllers', [])
         };
     })
 
-    .controller('ParksCtrl', function ($scope, parksService) {
+    .controller('ParksCtrl', function ($scope, parksService, $q) {
         $scope.title = "所有公園";
         $scope.skip = 0;
         $scope.limit = 10;
@@ -62,14 +62,21 @@ angular.module('SampleApp.controllers', [])
             }
         }
 
+        $scope.doRefresh = function () {
+            $scope.getParks().then(function () {
+                $scope.$broadcast('scroll.refreshComplete');
+            });
+        }
 
         $scope.getParks = function () {
-
+            var deferred = $q.defer();
             var where = undefined;
             if ($scope.searchText) where = "ParkName:" + $scope.searchText;
             parksService.getParks(where, $scope.skip, $scope.limit).then(function (data) {
                 $scope.parks = data;
+                deferred.resolve()
             });
+            return deferred.promise;
         }
 
         $scope.getParks();
