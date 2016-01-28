@@ -6,7 +6,11 @@
         <p />
         <form name="video" enctype="multipart/form-data" >
             <button class="button" ng-click="vm.takeVideo()">攝影</button>
-            <input type="file" ng-model="vm.videoModel.video" name="videoFile" />
         </form>
+
+        <progress max="100" value="vm.percentage" id="ft-prog">
+            <span style="color:black; white-space:nowrap;">{{vm.percentage}} / 100</span>
+            </progress>
+        </progress>
     </ion-content>
 </ion-view>

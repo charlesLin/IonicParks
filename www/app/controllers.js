@@ -117,6 +117,7 @@ angular.module('SampleApp.controllers', [])
     .controller('ngCordovaCtrl', function ($cordovaVibration, $cordovaCamera,
         $cordovaCapture, $http, $cordovaDialogs, $rootScope, $cordovaFileTransfer) {
         var vm = this;
+        vm.percentage = 0;
         vm.vibrate = function () {
             $cordovaVibration.vibrate(500);
         }
@@ -174,20 +175,32 @@ angular.module('SampleApp.controllers', [])
                     fileName: video.name,
                     chunkedMode: false,
                     mimeType: video.type,
-                    // params: {
-                    //     filename : video.name
-                    // }
+                    params: {
+                        filename : video.name
+                    },
+                    headers: {
+                        Connection: "close"
+                    }
                 };
 
-                $rootScope.$broadcast('loading:show');
+                //$rootScope.$broadcast('loading:show');
+                var watch = new StopWatch();
+                watch.Start();
                 $cordovaFileTransfer.upload(serverUrl,
                     path, options)
                     .then(function (d) {
+                        watch.Stop();
                         $rootScope.$broadcast('loading:hide');
-                        $cordovaDialogs.alert("儲存成功", "資訊", "確定");
+                        $cordovaDialogs.alert("儲存成功, " + watch.ElapsedMilliseconds + "msec", "資訊", "確定");
                     }, function (d) {
+                        watch.Stop();
                         $rootScope.$broadcast('loading:hide');
-                        $cordovaDialogs.alert("儲存失敗", "錯誤", "確定");
+                        $cordovaDialogs.alert("儲存失敗, " + watch.ElapsedMilliseconds + "msec", "錯誤", "確定");
+                    }, function (progress) {
+                        if (progress.lengthComputable) {
+                            var perc = Math.floor(progress.loaded / progress.total * 100);
+                            vm.percentage = perc;
+                        }
                     }
                 );
             }, function (err) {
@@ -197,3 +210,21 @@ angular.module('SampleApp.controllers', [])
         }
     })
 ;
+
+
+// Create a stopwatch "class."
+var StopWatch = function()
+{
+    this.StartMilliseconds = 0;
+    this.ElapsedMilliseconds = 0;
+}
+
+StopWatch.prototype.Start = function()
+{
+    this.StartMilliseconds = new Date().getTime();
+}
+
+StopWatch.prototype.Stop = function()
+{
+    this.ElapsedMilliseconds = new Date().getTime() - this.StartMilliseconds;
+}
