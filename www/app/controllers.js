@@ -114,7 +114,8 @@ angular.module('SampleApp.controllers', [])
         $scope.parks = parksService.getParksInArea($stateParams.area);
         $scope.title = $stateParams.area;
     })
-    .controller('ngCordovaCtrl', function ($cordovaVibration, $cordovaCamera) {
+    .controller('ngCordovaCtrl', function ($cordovaVibration, $cordovaCamera,
+        $cordovaCapture, $http, $cordovaDialogs, $rootScope, $cordovaFileTransfer) {
         var vm = this;
         vm.vibrate = function () {
             $cordovaVibration.vibrate(500);
@@ -139,15 +140,59 @@ angular.module('SampleApp.controllers', [])
             });
         }
 
+        // vm.takeVideo = function () {
+        //     var options = {
+        //         quality: 50,
+        //         sourceType: Camera.PictureSourceType.CAMERA,
+        //         mediaType: 1,
+        //         estinationType: Camera.DestinationType.FILE_URI
+        //     };
+        //     $cordovaCamera.getPicture(options).then(function (imageData) {
+        //         console.log(imageData);
+        //     });
+        // }
+
+        //https://devdactic.com/capture-and-store-videos-ionic/
         vm.takeVideo = function () {
-            var options = {
-                quality: 50,
-                sourceType: Camera.PictureSourceType.CAMERA,
-                mediaType: 1,
-                estinationType: Camera.DestinationType.FILE_URI
-            };
-            $cordovaCamera.getPicture(options).then(function (imageData) {
-                console.log(imageData);
+            var options = { limit: 1, duration: 15,
+            destinationType : Camera.DestinationType.FILE_URI,saveToPhotoAlbum:true };
+
+            $cordovaCapture.captureVideo(options).then(function (videoData) {
+                debugger;
+                // var formData = new FormData();
+                // formData.append("parkId", 1);
+                // formData.append("description", "i like it");
+                // formData.append("video", videoData[0]);
+
+                var video = videoData[0];
+                var path = video.fullPath.replace("file:/", "/");
+                var serverUrl = encodeURI("http://parks.azurewebsites.net/images/post?parkId=1&description=xxx");
+
+                var trustAllHosts = true;
+                var options = {
+                    fileKey: "yoro_vid",
+                    fileName: video.name,
+                    chunkedMode: false,
+                    mimeType: video.type,
+                    // params: {
+                    //     filename : video.name
+                    // }
+                };
+
+                $rootScope.$broadcast('loading:show');
+                $cordovaFileTransfer.upload(serverUrl,
+                    path, options)
+                    .then(function (d) {
+                        $rootScope.$broadcast('loading:hide');
+                        $cordovaDialogs.alert("儲存成功", "資訊", "確定");
+                    }, function (d) {
+                        $rootScope.$broadcast('loading:hide');
+                        $cordovaDialogs.alert("儲存失敗", "錯誤", "確定");
+                    }
+                );
+            }, function (err) {
+                // An error occurred. Show a message to the user
+                alert(err);
             });
         }
     })

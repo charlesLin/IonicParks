@@ -4,6 +4,9 @@
         <button class="button" ng-click="vm.takePic()">照相</button>
         <img id="myImage" />
         <p />
-        <button class="button" ng-click="vm.takeVideo()">攝影</button>
+        <form name="video" enctype="multipart/form-data" >
+            <button class="button" ng-click="vm.takeVideo()">攝影</button>
+            <input type="file" ng-model="vm.videoModel.video" name="videoFile" />
+        </form>
     </ion-content>
 </ion-view>

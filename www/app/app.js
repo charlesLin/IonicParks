@@ -95,7 +95,7 @@ angular.module('SampleApp', ['ionic', 'SampleApp.controllers', 'ngCordova'])
         $urlRouterProvider.otherwise('/app/parks');
     })
     .constant("ApiEndpoint", {
-        url: 'http://localhost:8100/opendata'
+        url: 'http://data.taipei/opendata'
     })
     .config(function ($httpProvider) {
         $httpProvider.interceptors.push(function ($rootScope) {
