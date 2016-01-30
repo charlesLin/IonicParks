@@ -85,7 +85,7 @@ angular.module('SampleApp', ['ionic', 'SampleApp.controllers', 'ngCordova'])
                     views: {
                         'menuContent': {
                             templateUrl: 'templates/ngCordova.html',
-                            controller : 'ngCordovaCtrl',
+                            controller: 'ngCordovaCtrl',
                             controllerAs: 'vm'
                         }
                     }
@@ -120,5 +120,26 @@ angular.module('SampleApp', ['ionic', 'SampleApp.controllers', 'ngCordova'])
             $ionicLoading.hide();
         })
 
+    })
+    .filter('trusted', ['$sce', function ($sce) {
+        return function (url) {
+            return $sce.trustAsResourceUrl(url);
+        };
+    }])
+    .directive('dynamicUrl', function () {
+        return {
+            restrict: 'A',
+            scope: {
+              dynamicUrlSrc : '='
+            },
+            link: function (scope, element, attr) {
+                scope.$watch("dynamicUrlSrc", function (newValue, oldValue) {
+                    element.attr('src', newValue);
+                 });
+
+            }
+        };
     });
+;
+;
 ;

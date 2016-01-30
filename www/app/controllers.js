@@ -82,7 +82,7 @@ angular.module('SampleApp.controllers', [])
         $scope.getParks();
     })
 
-    .controller('ParkCtrl', function ($scope, parksService, $stateParams, $cordovaDialogs) {
+    .controller('ParkCtrl', function ($scope, parksService, $stateParams, $cordovaDialogs, $ionicPopup) {
         var self = this;
         self.park = parksService.getPark($stateParams.parkId);
         self.getDesc = function () {
@@ -94,14 +94,29 @@ angular.module('SampleApp.controllers', [])
         }
 
         self.removeFromFavorates = function () {
-            $cordovaDialogs.confirm("確定要移除收藏?", "警告", ["確定", "取消"]).then(function (buttonIndex) {
-                if (buttonIndex == 1) {
-                    alert("已移除收藏");
-                    self.added = !self.added;
-                } else {
-                    alert("已取消");
-                }
+            // $cordovaDialogs.confirm("確定要移除收藏?", "警告", ["確定", "取消"]).then(function (buttonIndex) {
+            //     if (buttonIndex == 1) {
+            //         alert("已移除收藏");
+            //         self.added = !self.added;
+            //     } else {
+            //         alert("已取消");
+            //     }
+            // });
+
+            var confirmPopup = $ionicPopup.confirm({
+                title: '警告',
+                template: '確定要移除收藏?',
+                cancelText: '取消',
+                okText : '確定'
             });
+                confirmPopup.then(function(res) {
+                    if (res) {
+                        $ionicPopup.alert({ title: "已移除收藏" });
+                        self.added = !self.added;
+                    } else {
+                        $ionicPopup.alert({title: "已取消"});
+                    }
+                });
 
         }
 
@@ -191,6 +206,10 @@ angular.module('SampleApp.controllers', [])
                     .then(function (d) {
                         watch.Stop();
                         $rootScope.$broadcast('loading:hide');
+                        var parkImage = JSON.parse(d.response);
+                        vm.videoUrl = parkImage.ImageUri;
+                        //vm.videoContentType = parkImage.ContentType;
+                        vm.videoContentType = video.type;
                         $cordovaDialogs.alert("儲存成功, " + watch.ElapsedMilliseconds + "msec", "資訊", "確定");
                     }, function (d) {
                         watch.Stop();
