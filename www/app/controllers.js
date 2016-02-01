@@ -159,6 +159,10 @@ angular.module('SampleApp.controllers', [])
             favorateService.saveFavorates(vm.favorates);
         }
 
+        vm.alertIt = function(favorate, message) {
+            alert(message + " " + favorate.ParkName);
+        }
+
         init();
 
         function init() {

@@ -25,6 +25,12 @@
             <ion-item class="item-remove-animate" ng-repeat="favorate in vm.favorates">
                 <ion-delete-button class="ion-minus-circled" ng-click="vm.removeItem(favorate, $index)"></ion-delete-button>
                 {{favorate.ParkName}}
+                <ion-option-button class="button-assertive" ng-click="vm.alertIt(item, 'edit')">
+                    Edit
+                </ion-option-button>
+                <ion-option-button class="button-calm" ng-click="vm.alertIt(item, 'share')">
+                    Share
+                </ion-option-button>
                 <ion-reorder-button class="ion-navicon" on-reorder="vm.moveItem(favorate, $fromIndex, $toIndex)"></ion-reorder-button>
             </ion-item>
 
