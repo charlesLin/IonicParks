@@ -43,8 +43,8 @@
         }
 
         function saveFavorates(parks) {
-            var ids = _.map(parks, '_id');
-            localStorageService.set("favorates", ids);
+            var favorates = _.map(parks, '_id');
+            localStorageService.set("favorates", favorates);
 
         }
     }
