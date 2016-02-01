@@ -1,13 +1,33 @@
 <ion-view title="收藏">
+    <ion-nav-buttons side="right">
+        <button class="button ion-ios-minus-outline button-icon icon" ng-click="vm.data.showDelete = !vm.data.showDelete"> </button>
+        <button class="button" ng-click="vm.data.showDelete=false; vm.data.showReorder= !vm.data.showReorder;">排序</button>
+
+    </ion-nav-buttons>
+    <ion-header-bar class="bar-positive">
+
+        <div class="buttons">
+            <button class="button button-icon icon ion-ios-minus-outline"></button>
+        </div>
+        <h1 class="title">收藏</h1>
+    </ion-header-bar>
     <ion-content>
 
-        <div class="card" ng-repeat="favorate in vm.favorates">
+        <!--<div class="card" ng-repeat="favorate in vm.favorates">
             <div class="item item-checkbox">
-                <h2></h2>
+                <h2>{{favorate.ParkName}}</h2>
                 <label  class="checkbox">
                     <input type="checkbox" ng-model="favorate.following">
                 </label>
             </div>
-        </div>
+        </div>-->
+        <ion-list show-delete="vm.data.showDelete" show-reorder="vm.data.showReorder">
+            <ion-item class="item-remove-animate" ng-repeat="favorate in vm.favorates">
+                <ion-delete-button class="ion-minus-circled" ng-click="vm.removeItem(favorate, $index)"></ion-delete-button>
+                {{favorate.ParkName}}
+                <ion-reorder-button class="ion-navicon" on-reorder="vm.moveItem(favorate, $fromIndex, $toIndex)"></ion-reorder-button>
+            </ion-item>
+
+        </ion-list>
     </ion-content>
 </ion-view>

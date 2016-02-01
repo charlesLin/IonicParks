@@ -97,8 +97,6 @@ angular.module('SampleApp.controllers', [])
             self.added = favorateService.hasFavorate(self.park._id);
         }
         self.addFavorate = function () {
-            //$localStorage.setItem('favorateParks', '')
-            debugger;
             favorateService.addFavorate(self.park._id);
             var added = favorateService.hasFavorate(self.park._id);
             $cordovaDialogs.alert("已加入收藏", "資訊", "確定");
@@ -141,6 +139,31 @@ angular.module('SampleApp.controllers', [])
     .controller('AreaCtrl', function ($scope, parksService, $stateParams) {
         $scope.parks = parksService.getParksInArea($stateParams.area);
         $scope.title = $stateParams.area;
+    })
+    .controller('FavorateCtrl', function (parksService, favorateService) {
+        //https://codepen.io/ionic/pen/JsHjf
+        var vm = this;
+
+        vm.data = {
+            showDelete : false
+        };
+
+        vm.removeItem = function (favorate, index) {
+            favorateService.removeFavorate(favorate._id);
+            vm.favorates.splice(index, 1);
+        }
+
+        vm.moveItem = function (favorate, from, to) {
+            vm.favorates.splice(from, 1);
+            vm.favorates.splice(to, 0, favorate);
+            favorateService.saveFavorates(vm.favorates);
+        }
+
+        init();
+
+        function init() {
+            vm.favorates = parksService.getFavorateParks();
+        }
     })
     .controller('ngCordovaCtrl', function ($cordovaVibration, $cordovaCamera,
         $cordovaCapture, $http, $cordovaDialogs, $rootScope, $cordovaFileTransfer) {
@@ -187,7 +210,6 @@ angular.module('SampleApp.controllers', [])
             destinationType : Camera.DestinationType.FILE_URI,saveToPhotoAlbum:true };
 
             $cordovaCapture.captureVideo(options).then(function (videoData) {
-                debugger;
                 // var formData = new FormData();
                 // formData.append("parkId", 1);
                 // formData.append("description", "i like it");

@@ -23,14 +23,12 @@ angular.module('SampleApp', ['ionic', 'SampleApp.controllers', 'ngCordova', 'Loc
 
     .config(function ($stateProvider, $urlRouterProvider) {
         $stateProvider
-
             .state('app', {
                 url: '/app',
                 abstract: true,
                 templateUrl: 'templates/menu.html',
                 controller: 'AppCtrl'
             })
-
             .state('app.search', {
                 url: '/search',
                 views: {
@@ -75,6 +73,16 @@ angular.module('SampleApp', ['ionic', 'SampleApp.controllers', 'ngCordova', 'Loc
                     'menuContent': {
                         templateUrl: 'templates/park.html',
                         controller: 'ParkCtrl',
+                        controllerAs: 'vm'
+                    }
+                }
+            })
+            .state('app.favorates', {
+                url: '/favorates',
+                views: {
+                    'menuContent': {
+                        templateUrl: 'templates/favorates.html',
+                        controller: 'FavorateCtrl',
                         controllerAs: 'vm'
                     }
                 }

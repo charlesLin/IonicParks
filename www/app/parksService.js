@@ -5,12 +5,13 @@
         .module('SampleApp')
         .factory('parksService', parksService);
 
-    parksService.$inject = ['$http', 'ApiEndpoint', '$q'];
-    function parksService($http, ApiEndpoint, $q) {
+    parksService.$inject = ['$http', 'ApiEndpoint', '$q', 'favorateService'];
+    function parksService($http, ApiEndpoint, $q, favorateService) {
         var service = {
             getParks: getParks,
             getPark: getPark,
-            getParksInArea : getParksInArea
+            getParksInArea: getParksInArea,
+            getFavorateParks : getFavorateParks
         };
 
         return service;
@@ -36,7 +37,7 @@
 
             var url = ApiEndpoint.url + "/datalist/apiAccess?scope=resourceAquire&rid=8f6fcb24-290b-461d-9d34-72ed1b3f51f0";
             if (limit) url += "&limit=" + limit;
-            if (skip) url +=  "&offset=" + skip;
+            if (skip) url += "&offset=" + skip;
 
             if (where)
                 url += "&q=" + where;
@@ -53,6 +54,17 @@
 
         }
 
+        function getFavorateParks() {
+            var parks = [];
+            favorateService.getFavorateIds().map(function (v) {
+                var park =_.find(getAllParks(), function (o) {
+                    return o._id == v;
+                });
+                parks.push(park);
+            });
+
+            return parks;
+        }
 
 
         function getAllParks() {

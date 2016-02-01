@@ -10,11 +10,13 @@
         this.addFavorate = addFavorate;
         this.hasFavorate = hasFavorate;
         this.removeFavorate = removeFavorate;
+        this.getFavorateIds = getFavorateIds;
+        this.saveFavorates = saveFavorates;
+
 
         var favorates = [];
         init();
         function init() {
-            debugger;
             favorates = localStorageService.get("favorates");
             if (!favorates) favorates = [];
         }
@@ -32,8 +34,18 @@
 
         function removeFavorate(id) {
             var index = favorates.indexOf(id);
-            favorates = favorates.slice(index + 1, 1);
+             favorates.splice(index, 1);
             localStorageService.set("favorates", favorates);
+        }
+
+        function getFavorateIds() {
+            return favorates;
+        }
+
+        function saveFavorates(parks) {
+            var ids = _.map(parks, '_id');
+            localStorageService.set("favorates", ids);
+
         }
     }
 })();
