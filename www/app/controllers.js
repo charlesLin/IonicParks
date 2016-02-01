@@ -82,13 +82,25 @@ angular.module('SampleApp.controllers', [])
         $scope.getParks();
     })
 
-    .controller('ParkCtrl', function ($scope, parksService, $stateParams, $cordovaDialogs, $ionicPopup) {
+    .controller('ParkCtrl', function ($scope, parksService, $stateParams, $cordovaDialogs, $ionicPopup,
+        favorateService) {
         var self = this;
-        self.park = parksService.getPark($stateParams.parkId);
+
         self.getDesc = function () {
             return self.park.Introduction.replace(/(?:\r\n|\r|\n)/g, '<br />');
         }
+
+        init();
+
+        function init() {
+            self.park = parksService.getPark($stateParams.parkId);
+            self.added = favorateService.hasFavorate(self.park._id);
+        }
         self.addFavorate = function () {
+            //$localStorage.setItem('favorateParks', '')
+            debugger;
+            favorateService.addFavorate(self.park._id);
+            var added = favorateService.hasFavorate(self.park._id);
             $cordovaDialogs.alert("已加入收藏", "資訊", "確定");
             self.added = !self.added;
         }
