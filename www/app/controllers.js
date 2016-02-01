@@ -123,6 +123,7 @@ angular.module('SampleApp.controllers', [])
             });
                 confirmPopup.then(function(res) {
                     if (res) {
+                        favorateService.removeFavorate(self.park._id);
                         $ionicPopup.alert({ title: "已移除收藏" });
                         self.added = !self.added;
                     } else {

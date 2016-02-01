@@ -9,6 +9,7 @@
     function favorateService(localStorageService) {
         this.addFavorate = addFavorate;
         this.hasFavorate = hasFavorate;
+        this.removeFavorate = removeFavorate;
 
         var favorates = [];
         init();
@@ -27,6 +28,12 @@
 
         function hasFavorate(parkId) {
             return favorates.indexOf(parkId) > -1;
+        }
+
+        function removeFavorate(id) {
+            var index = favorates.indexOf(id);
+            favorates = favorates.slice(index + 1, 1);
+            localStorageService.set("favorates", favorates);
         }
     }
 })();
