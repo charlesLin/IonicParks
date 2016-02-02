@@ -67,7 +67,11 @@ angular.module('SampleApp.controllers', [])
         }
 
         $scope.doRefresh = function () {
+            $scope.canShowMore = true;
             $scope.getParks().then(function () {
+                $scope.$broadcast('scroll.refreshComplete');
+            }, function () {
+                debugger;
                 $scope.$broadcast('scroll.refreshComplete');
             });
         }
@@ -82,7 +86,10 @@ angular.module('SampleApp.controllers', [])
                      $scope.canShowMore = false;
                 else
                     $scope.parks = $scope.parks.concat(data);
-                deferred.resolve()
+                deferred.resolve();
+            }, function () {
+                $scope.canShowMore = false;
+                deferred.reject();
             });
             return deferred.promise;
         }

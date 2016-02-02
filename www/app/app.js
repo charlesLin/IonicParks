@@ -106,18 +106,41 @@ angular.module('SampleApp', ['ionic', 'SampleApp.controllers', 'ngCordova', 'Loc
         url: 'http://data.taipei/opendata'
     })
     .config(function ($httpProvider) {
-        $httpProvider.interceptors.push(function ($rootScope) {
+        $httpProvider.interceptors.push(function ($rootScope, $q) {
             return {
                 request: function (config) {
-                    $rootScope.$broadcast('loading:show')
-                    return config
+                    $rootScope.$broadcast('loading:show');
+                    return config;
+                },
+                requestError: function (rejection) {
+                    $rootScope.$broadcast('loading:hide');
+                    return $q.reject(rejection);
                 },
                 response: function (response) {
-                    $rootScope.$broadcast('loading:hide')
-                    return response
+                    $rootScope.$broadcast('loading:hide');
+                    return response;
+                },
+                responseError: function (rejection) {
+                    console.log("Rejecton !");
+                    console.log(rejection);
+                    $rootScope.$broadcast('loading:hide');
+                    return $q.reject(rejection);
                 }
             }
         });
+    })
+    .config(function ($provide) {
+        $provide.decorator("$exceptionHandler", ['$delegate', '$window',
+            function ($delegate, $window) {
+                return function (exception, cause) {
+                    // if ($window.atatus) {
+                    //     $window.atatus.notify(exception);
+                    // }
+                    alert(exception.toString());
+                    // (Optional) Pass the error through to the delegate
+                    $delegate(exception, cause);
+                }
+            }]);
     })
     .run(function ($rootScope, $ionicLoading) {
         $rootScope.$on("loading:show", function () {
@@ -138,12 +161,12 @@ angular.module('SampleApp', ['ionic', 'SampleApp.controllers', 'ngCordova', 'Loc
         return {
             restrict: 'A',
             scope: {
-              dynamicUrlSrc : '='
+                dynamicUrlSrc: '='
             },
             link: function (scope, element, attr) {
                 scope.$watch("dynamicUrlSrc", function (newValue, oldValue) {
                     element.attr('src', newValue);
-                 });
+                });
 
             }
         };
