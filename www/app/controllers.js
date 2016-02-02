@@ -47,11 +47,15 @@ angular.module('SampleApp.controllers', [])
         $scope.limit = 10;
         $scope.pageNo = 1;
         $scope.searchText;
+        $scope.parks = [];
+        $scope.canShowMore = true;
 
         $scope.nextPage = function () {
             $scope.pageNo++;
             $scope.skip = ($scope.pageNo - 1) * 10;
             $scope.getParks();
+
+            $scope.$broadcast('scroll.infiniteScrollComplete');
         }
 
         $scope.prevPage = function () {
@@ -68,12 +72,16 @@ angular.module('SampleApp.controllers', [])
             });
         }
 
+
         $scope.getParks = function () {
             var deferred = $q.defer();
             var where = undefined;
             if ($scope.searchText) where = "ParkName:" + $scope.searchText;
             parksService.getParks(where, $scope.skip, $scope.limit).then(function (data) {
-                $scope.parks = data;
+                if (data.length == 0)
+                     $scope.canShowMore = false;
+                else
+                    $scope.parks = $scope.parks.concat(data);
                 deferred.resolve()
             });
             return deferred.promise;

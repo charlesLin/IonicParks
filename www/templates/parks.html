@@ -17,16 +17,17 @@
 
         <ion-list>
             <ion-item ng-repeat="park in parks" href="#/app/parks/{{park._id}}" class="item item-icon-right">
-                {{park.ParkName}}
+                <span style="margin: 0 10px">{{park._id}}</span>{{park.ParkName}}
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>
+            <ion-infinite-scroll ng-if="canShowMore" on-infinite="nextPage()" distance="30%"></ion-infinite-scroll>
         </ion-list>
 
     </ion-content>
-    <ion-footer-bar class="bar bar-footer bar-light">
+    <!--<ion-footer-bar class="bar bar-footer bar-light">
         <button class="button icon ion-ios-rewind" ng-click="prevPage()">上一頁</button>
         <h1 class="title title-center">{{pageNo}}</h1>
         <button class="button icon ion-ios-fastforward" ng-click="nextPage()">下一頁</button>
-    </ion-footer-bar>
+    </ion-footer-bar>-->
 
 </ion-view>
