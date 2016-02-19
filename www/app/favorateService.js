@@ -5,13 +5,14 @@
         .module('SampleApp')
         .service('favorateService', favorateService);
 
-    favorateService.$inject = ['localStorageService'];
-    function favorateService(localStorageService) {
+    favorateService.$inject = ['localStorageService', '$http'];
+    function favorateService(localStorageService, $http) {
         this.addFavorate = addFavorate;
         this.hasFavorate = hasFavorate;
         this.removeFavorate = removeFavorate;
         this.getFavorateIds = getFavorateIds;
         this.saveFavorates = saveFavorates;
+        this.uploadFavorates = uploadFavorates;
 
 
         var favorates = [];
@@ -46,6 +47,10 @@
             var favorates = _.map(parks, '_id');
             localStorageService.set("favorates", favorates);
 
+        }
+
+        function uploadFavorates(favorates, signature1) {
+            return $http.post("http://parks.azurewebsites.net/favorates/uploadFavorates", { favorates: favorates, signature: signature1 });
         }
     }
 })();

@@ -178,6 +178,10 @@ angular.module('SampleApp.controllers', [])
             alert(message + " " + favorate.ParkName);
         }
 
+        vm.uploadFavorates = function () {
+            favorateService.uploadFavorates(vm.favorates, vm.signature1);
+        }
+
         init();
 
         function init() {
