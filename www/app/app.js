@@ -152,6 +152,59 @@ angular.module('SampleApp', ['ionic', 'SampleApp.controllers', 'ngCordova', 'Loc
         })
 
     })
+    .run(function ($cordovaPush, $cordovaToast, $rootScope, notificationService) {
+        var androidConfig = {
+            "senderID": "392821285701",
+        };
+
+        document.addEventListener("deviceready", function () {
+            $cordovaPush.register(androidConfig).then(function (result) {
+                // Success
+                console.log("Register success " + result);
+                $cordovaToast.showShortCenter('Registered for push notifications');
+
+            }, function (err) {
+                // Error
+                 console.log("Register error " + err)
+            })
+
+            $rootScope.$on('$cordovaPush:notificationReceived', function (event, notification) {
+                switch (notification.event) {
+                    case 'registered':
+                        if (notification.regid.length > 0) {
+                            alert('registration ID = ' + notification.regid);
+                            notificationService.register(notification.regid).then(function (resp) {
+                                alert(resp);
+                            });
+                        }
+                        break;
+
+                    case 'message':
+                        // this is the actual push notification. its format depends on the data model from the push server
+                        //alert('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
+                        $cordovaToast.showShortCenter(notification.message);
+                        break;
+
+                    case 'error':
+                        alert('GCM error = ' + notification.msg);
+                        break;
+
+                    default:
+                        alert('An unknown GCM event has occurred');
+                        break;
+                }
+            });
+
+
+            // WARNING: dangerous to unregister (results in loss of tokenID)
+            $cordovaPush.unregister(options).then(function (result) {
+                // Success!
+            }, function (err) {
+                // Error
+            })
+
+        }, false);
+    })
     .filter('trusted', ['$sce', function ($sce) {
         return function (url) {
             return $sce.trustAsResourceUrl(url);
@@ -173,6 +226,7 @@ angular.module('SampleApp', ['ionic', 'SampleApp.controllers', 'ngCordova', 'Loc
     })
 //https://forum.ionicframework.com/t/signaturedirective-in-ionic-using-szimek-signature-pad/13179/6
 //https://github.com/sonicd300/TNF-IonicUtils
+//https://github.com/szimek/signature_pad
     .directive('signature', function ($ionicModal) {
         var canvas = null,
             ratio = 1.0;
