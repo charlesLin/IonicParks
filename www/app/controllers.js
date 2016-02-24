@@ -199,8 +199,15 @@ angular.module('SampleApp.controllers', [])
             var url = "https://azurefee.azurewebsites.net/services/prices/costs/" + format + "/" + format;
             $http.get(url).then(function (resp) {
                 vm.data = resp.data;
-                vm.labels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
-                vm.data = [300, 500, 100];
+                var labels = [];
+                var data = [];
+                for (var i = 0; i < resp.data.length; i++) {
+                    var element = resp.data[i];
+                    labels.push(element.subscriptionName);
+                    data.push(element.cost.toFixed(0));
+                }
+                vm.labels = labels;
+                vm.data = data;
                 vm.colours = ['#97BBCD', '#DCDCDC', '#F7464A', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'];
             });
         }

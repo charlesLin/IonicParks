@@ -125,11 +125,16 @@ angular.module('SampleApp', ['ionic', 'SampleApp.controllers', 'ngCordova', 'Loc
             datasetFill: true,
             onAnimationComplete: function () {
                 this.showTooltip(this.segments, true);
-            }
+            },
+
         });
         // Configure all doughnut charts
         ChartJsProvider.setOptions('Doughnut', {
             animateScale: true
+        });
+        ChartJsProvider.setOptions('Pie', {
+            animateScale: true,
+            legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label + ' ' + segments[i].value%><%}%></li><%}%></ul>"
         });
     })
     .config(function ($httpProvider) {

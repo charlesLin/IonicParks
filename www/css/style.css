@@ -1,1 +1,20 @@
 /* Empty. Add your own CSS if you like */
+
+.tc-chart-js-legend li {
+  display: block;
+  float: left;
+  clear:both;
+  padding:10px;
+}
+.tc-chart-js-legend li span {
+  width:25px;
+  height:25px;
+  display:block;
+  float:left;
+  margin-right:10px;
+}
+
+.pie-legend li {
+    display: block;
+    text-align: left
+}
