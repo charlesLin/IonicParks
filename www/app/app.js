@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('SampleApp', ['ionic', 'SampleApp.controllers', 'ngCordova', 'LocalStorageModule'])
+angular.module('SampleApp', ['ionic', 'SampleApp.controllers', 'ngCordova', 'LocalStorageModule', "chart.js"])
     .run(function ($ionicPlatform) {
         $ionicPlatform.ready(function () {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -97,13 +97,40 @@ angular.module('SampleApp', ['ionic', 'SampleApp.controllers', 'ngCordova', 'Loc
                             controllerAs: 'vm'
                         }
                     }
-                });
+                })
+            .state('app.pie', {
+                url: '/pie',
+                views: {
+                    'menuContent': {
+                        templateUrl: 'templates/pie.html',
+                        controller: 'pieCtrl',
+                        controllerAs: 'vm'
+                    }
+                }
+            });
         ;
         // if none of the above states are matched, use this as the fallback
         $urlRouterProvider.otherwise('/app/parks');
     })
     .constant("ApiEndpoint", {
         url: 'http://data.taipei/opendata'
+    })
+    .config(function (ChartJsProvider) {
+        // Configure all charts
+        ChartJsProvider.setOptions({
+            colours: ['#97BBCD', '#DCDCDC', '#F7464A', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'],
+            responsive: false,
+            multiTooltipTemplate: "<%= datasetLabel %> - <%= value %>",
+            scaleShowLabels: true,
+            datasetFill: true,
+            onAnimationComplete: function () {
+                this.showTooltip(this.segments, true);
+            }
+        });
+        // Configure all doughnut charts
+        ChartJsProvider.setOptions('Doughnut', {
+            animateScale: true
+        });
     })
     .config(function ($httpProvider) {
         $httpProvider.interceptors.push(function ($rootScope, $q) {
@@ -165,7 +192,7 @@ angular.module('SampleApp', ['ionic', 'SampleApp.controllers', 'ngCordova', 'Loc
 
             }, function (err) {
                 // Error
-                 console.log("Register error " + err)
+                console.log("Register error " + err)
             })
 
             $rootScope.$on('$cordovaPush:notificationReceived', function (event, notification) {

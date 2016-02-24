@@ -188,6 +188,28 @@ angular.module('SampleApp.controllers', [])
             vm.favorates = parksService.getFavorateParks();
         }
     })
+    .controller('pieCtrl', function ($http) {
+        //https://azurefee.azurewebsites.net/services/prices/costs/201602/201602
+        var vm = this;
+        active();
+        function active() {
+            vm.year = new Date().getFullYear();
+            vm.month = new Date().getMonth() + 1;
+            var format = vm.year + "" + n(vm.month);
+            var url = "https://azurefee.azurewebsites.net/services/prices/costs/" + format + "/" + format;
+            $http.get(url).then(function (resp) {
+                vm.data = resp.data;
+                vm.labels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
+                vm.data = [300, 500, 100];
+                vm.colours = ['#97BBCD', '#DCDCDC', '#F7464A', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'];
+            });
+        }
+
+        function n(n){
+            return n > 9 ? "" + n: "0" + n;
+        }
+
+    })
     .controller('ngCordovaCtrl', function ($cordovaVibration, $cordovaCamera,
         $cordovaCapture, $http, $cordovaDialogs, $rootScope, $cordovaFileTransfer) {
         var vm = this;
