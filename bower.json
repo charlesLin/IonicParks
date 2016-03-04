@@ -9,6 +9,7 @@
   "dependencies": {
     "lodash": "~4.0.0",
     "angular-local-storage": "^0.2.3",
-    "angular-chart.js": "^0.8.8"
+    "angular-chart.js": "^0.8.8",
+    "angular-google-maps": "^2.3.2"
   }
 }

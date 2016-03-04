@@ -1,8 +1,12 @@
 <ion-view view-title="{{vm.park.ParkName}}">
-  <ion-content>
+  <ion-content data-tap-disabled="true">
     <h1>{{vm.park.ParkName}}</h1>
     <span ng-bind-html="vm.getDesc()"></span><br />
     <img ng-src="{{vm.park.Image}}" style="width:50%;height:auto;display:block;margin:0 auto;" />
+    <ui-gmap-google-map center="vm.map.center" zoom="vm.map.zoom">
+        <ui-gmap-markers models="vm.places" coords="'self'" icon="'icon'"></ui-gmap-markers>
+    </ui-gmap-google-map>
+    <!--<ui-gmap-google-map center="map.center" zoom="map.zoom"></ui-gmap-google-map>-->
   </ion-content>
   <ion-footer-bar>
       <button class="button icon ion-ios-star-outline" ng-click="vm.added ? vm.removeFromFavorates() : vm.addFavorate()"

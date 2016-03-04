@@ -105,10 +105,25 @@ angular.module('SampleApp.controllers', [])
             return self.park.Introduction.replace(/(?:\r\n|\r|\n)/g, '<br />');
         }
 
+
         init();
 
         function init() {
             self.park = parksService.getPark($stateParams.parkId);
+            //http://www.gajotres.net/using-google-maps-with-ionic-framework/
+            self.map = { center: { latitude:
+                parseFloat(self.park.Latitude),
+                longitude: parseFloat(self.park.Longitude) }, zoom: 16 };
+
+            self.places = [
+                 {
+                   id: self.park._id,
+                   latitude: parseFloat(self.park.Latitude),
+                   longitude: parseFloat(self.park.Longitude),
+                   title: self.park.ParkName
+                 }
+               ];
+
             self.added = favorateService.hasFavorate(self.park._id);
         }
         self.addFavorate = function () {
